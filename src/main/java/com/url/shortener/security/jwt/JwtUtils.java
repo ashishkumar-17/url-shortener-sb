@@ -7,6 +7,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -14,6 +16,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Component
 public class JwtUtils {
 
     @Value("${jwt.secret}")
@@ -35,41 +38,38 @@ public class JwtUtils {
     public String generateToken(UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
         String roles = userDetails.getAuthorities().stream()
-                .map(authority -> authority.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
                 .subject(username)
                 .claim("roles", roles)
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + jwtExpirationMs))
-                .signWith(key())
+                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(getkey())
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser()
-                .verifyWith((SecretKey) key())
-                .build().parseSignedClaims(token)
+                .verifyWith((SecretKey) getkey())
+                .build()
+                .parseSignedClaims(token)
                 .getPayload().getSubject();
     }
 
-    private Key key(){
+    private Key getkey(){
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     public boolean validateToken(String authToken){
         try {
-            Jwts.parser().verifyWith((SecretKey) key())
+            Jwts.parser().verifyWith((SecretKey) getkey())
                     .build().parseSignedClaims(authToken);
 
             return true;
         } catch (JwtException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 }
