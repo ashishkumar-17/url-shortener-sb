@@ -6,7 +6,6 @@ import com.url.shortener.repository.UserRepository;
 import com.url.shortener.security.jwt.JwtAuthenticationResponse;
 import com.url.shortener.security.jwt.JwtUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,9 +24,9 @@ public class UserService {
 
 
 
-    public User registerUser(User user){
+    public void registerUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public JwtAuthenticationResponse loginUser(LoginRequest request){
