@@ -7,7 +7,7 @@ import com.url.shortener.model.UrlMapping;
 import com.url.shortener.model.User;
 import com.url.shortener.repository.ClickEventRepository;
 import com.url.shortener.repository.UrlMappingRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,14 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UrlMappingService {
     @Value("${characters}")
     private String characters;
 
     @Autowired
     private UrlMappingRepository urlMappingRepository;
+    @Autowired
     private ClickEventRepository clickEventRepository;
 
     public UrlMappingDTO createShortUrl(String originalUrl, User user) {
