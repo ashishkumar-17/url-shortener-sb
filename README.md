@@ -4,8 +4,9 @@ A scalable and secure URL shortening service built with Spring Boot, featuring J
 
 ## 🚀 Live Demo
 
-**API Base URL:** [https://shortbit-sb.onrender.com/api](https://shortbit-sb.onrender.com/api)
-**Frontend Application:** [Live Demo](https://incomparable-liger-aadad9.netlify.app/)
+**API Base URL:** [https://shortbit-sb.onrender.com/api](https://shortbit-sb.onrender.com/api) <br>
+**Frontend Application:** [Live Demo](https://incomparable-liger-aadad9.netlify.app/) <br>
+**Frontend Repository:** [https://github.com/ashishkumar-17/url-shortener-react](https://github.com/ashishkumar-17/url-shortener-react)
 
 ## ✨ Key Features
 
